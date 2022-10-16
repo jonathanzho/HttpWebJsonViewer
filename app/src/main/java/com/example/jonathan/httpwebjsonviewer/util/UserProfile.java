@@ -1,12 +1,15 @@
 package com.example.jonathan.httpwebjsonviewer.util;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class UserProfile {
-  private String mUserName;
-  private String mEmail;
-  private double mAmount;
-  private List<String> mFriendList;
+  // SerializedName appears to be needed to make fromJson() work:
+  @SerializedName("userName") private String mUserName;
+  @SerializedName("email") private String mEmail;
+  @SerializedName("amount") private double mAmount;
+  @SerializedName("friends") private List<String> mFriendList;
 
   public UserProfile() {}
 

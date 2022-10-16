@@ -9,14 +9,15 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.jonathan.httpwebjsonviewer.util.UserProfile;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
@@ -125,24 +126,15 @@ public class MainActivity extends AppCompatActivity {
       GsonBuilder gsonBuilder = new GsonBuilder();
       Gson gson = gsonBuilder.create();
 
-      // Deserialize JSON
-      UserProfile[] userProfiles = gson.fromJson(result, UserProfile[].class);
-
-      int numUsers = userProfiles.length;
-
-      Log.d(TAG2, "numUsers=[" + numUsers + "]");
-
-      String user0Name = userProfiles[0].getUserName();
-      String user0Email = userProfiles[0].getEmail();
-      double user0Amount = userProfiles[0].getAmount();
-      List<String> user0FriendList = userProfiles[0].getFriendList();
-
-      // ??? actual:
-      // null, null, 0.0, null
-      // expected:
-      // "Jonathan", "jonathan@abc.cpm", 12.34, ["Joe", "George", "Gary"]
-      Log.d(TAG2, "user0Name=[" + user0Name + "], user0Email=[" + user0Email +
-          "], user0Amount=[" + user0Amount + "], user0FriendList=[" + user0FriendList + "]");
+      // Deserialize JSON string:
+      Type listType = new TypeToken<List<UserProfile>>(){}.getType();
+      List<UserProfile> userProfileList = gson.fromJson(result, listType);
+      for (UserProfile up : userProfileList) {
+        Log.d(TAG, "userName=[" + up.getUserName() +
+            "], email=[" + up.getEmail() +
+            "], amount=[" + up.getAmount() +
+            "], friends=[" + up.getFriendList() + "]");
+      }
 
       // Display
       tvHW.setText(result);
