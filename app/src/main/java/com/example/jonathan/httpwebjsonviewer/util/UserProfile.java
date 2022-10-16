@@ -19,6 +19,6 @@ public class UserProfile {
   public double getAmount() { return mAmount; }
   public void setAmount(double amount) { mAmount = amount; }
 
-  public List<String> getFriends() { return mFriendList; }
-  public void setFriends(List<String> friends) { mFriendList = friends; }
+  public List<String> getFriendList() { return mFriendList; }
+  public void setFriendList(List<String> friendList) { mFriendList = friendList; }
 }

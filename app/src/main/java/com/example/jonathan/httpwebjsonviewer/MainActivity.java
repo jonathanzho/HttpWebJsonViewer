@@ -19,11 +19,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
   private static final String TAG = "HWJV: MainActivity";
 
-  private static final String TEST_JSON_URL = "https://raw.githubusercontent.com/jonathanzho/resFiles/master/json/user_profiles.json";
+  // URL in jonathanzho's github account:
+  private static final String TEST_JSON_URL =
+      "https://raw.githubusercontent.com/jonathanzho/resFiles/master/json/user_profiles.json";
 
   ProgressDialog pd;
   TextView tvHW;
@@ -130,12 +133,18 @@ public class MainActivity extends AppCompatActivity {
       Log.d(TAG2, "numUsers=[" + numUsers + "]");
 
       String user0Name = userProfiles[0].getUserName();
+      String user0Email = userProfiles[0].getEmail();
+      double user0Amount = userProfiles[0].getAmount();
+      List<String> user0FriendList = userProfiles[0].getFriendList();
 
-      Log.d(TAG2, "user0Name=[" + user0Name + "]");
+      // ??? actual:
+      // null, null, 0.0, null
+      // expected:
+      // "Jonathan", "jonathan@abc.cpm", 12.34, ["Joe", "George", "Gary"]
+      Log.d(TAG2, "user0Name=[" + user0Name + "], user0Email=[" + user0Email +
+          "], user0Amount=[" + user0Amount + "], user0FriendList=[" + user0FriendList + "]");
 
       // Display
-      tvHW.setText(result);
-      //JZ: not working? null user0Name  tvHWsetText(user0Name);
       tvHW.setText(result);
     }
   }
