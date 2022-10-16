@@ -18,11 +18,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
-  private static final String TAG = MainActivity.class.getSimpleName();
+  private static final String TAG = "HWJV: MainActivity";
 
   private static final String TEST_JSON_URL = "https://raw.githubusercontent.com/jonathanzho/resFiles/master/json/user_profiles.json";
 
@@ -40,14 +39,14 @@ public class MainActivity extends AppCompatActivity {
 
     tvHW = findViewById(R.id.tvHW);
 
-    JsonTask jsonTask = new JsonTask();
+    HwjvAsyncTask jsonTask = new HwjvAsyncTask();
     jsonTask.execute(TEST_JSON_URL);
 
     Log.d(TAG, "onCreate: end");
   }
 
-  private class JsonTask extends AsyncTask<String, String, String> {
-    private final String TAG2 = JsonTask.class.getSimpleName();
+  private class HwjvAsyncTask extends AsyncTask<String, String, String> {
+    private final String TAG2 = "HWJV: HwjvAsyncTask";
 
     @Override
     protected void onPreExecute() {
@@ -89,8 +88,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         result = buffer.toString();
-      } catch (MalformedURLException e) {
-        e.printStackTrace();
       } catch (IOException e) {
         e.printStackTrace();
       } finally {
@@ -138,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
 
       // Display
       tvHW.setText(result);
-      tvHW.setText(user0Name);
+      //JZ: not working? null user0Name  tvHWsetText(user0Name);
+      tvHW.setText(result);
     }
   }
 }

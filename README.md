@@ -1,2 +1,2 @@
 # HttpWebJsonViewer
-A web JSON viewer using HttpUrlConnection.
+A web JSON file viewer using HttpUrlConnection.
