@@ -7,7 +7,11 @@ import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.jonathan.httpwebjsonviewer.adapter.CustomAdapter;
 import com.example.jonathan.httpwebjsonviewer.util.UserProfile;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -20,6 +24,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,14 +44,29 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
-    // Customization starts from here
+    RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
+    recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    recyclerView.setAdapter(new CustomAdapter(generateData()));
+    recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+
+    // Customization starts from here
+/*
     tvHW = findViewById(R.id.tvHW);
 
     HwjvAsyncTask jsonTask = new HwjvAsyncTask();
     jsonTask.execute(TEST_JSON_URL);
-
+*/
     Log.d(TAG, "onCreate: end");
+  }
+
+  private List<String> generateData() {
+    List<String> data = new ArrayList<>();
+    for (int i = 0; i < 100; i++) {
+      data.add(String.valueOf(i) + "th Element");
+    }
+    return data;
   }
 
   private class HwjvAsyncTask extends AsyncTask<String, String, String> {
@@ -137,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
       }
 
       // Display
-      tvHW.setText(result);
+      //tvHW.setText(result);
     }
   }
 }
