@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jonathan.httpwebjsonviewer.adapter.MyRecyclerViewAdapter;
+import com.example.jonathan.httpwebjsonviewer.model.Model;
 import com.example.jonathan.httpwebjsonviewer.model.UserProfile;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -25,15 +26,18 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Observer {
   private static final String TAG = "HWJV: MainActivity";
 
   // URL in jonathanzho's github account:
   private static final String TEST_JSON_URL =
       "https://raw.githubusercontent.com/jonathanzho/resFiles/master/json/user_profiles.json";
 
-  List<UserProfile> mUserProfileList;
+  // MVC architecture:
+  Model mModel;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    // Connect with ModeL:
+    mModel = new Model();
+    mModel.addObserver(this);
 
     // Get initial data:
     HwjvAsyncTask jsonTask = new HwjvAsyncTask();
@@ -66,23 +74,26 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private List<UserProfile> generateData() {
-    List<UserProfile> userProfileList = new ArrayList<>();
+    List<UserProfile> userProfileList = mModel.getUserProfileList();
 
-    if (mUserProfileList != null) {
-      for (int i = 0; i < mUserProfileList.size(); i++) {
-        userProfileList.add(mUserProfileList.get(i));
-      }
-    } else {
+    if (userProfileList == null) {
       // If no userProfileList are available, use a dummy user profile:
       UserProfile up = new UserProfile();
       up.setUserName("no user name");
       up.setEmail("no email");
       up.setAmount(-1.0);
       up.setFriendList(Arrays.asList("no", "friends"));
-      userProfileList.add(new UserProfile());
+
+      userProfileList = new ArrayList<>();
+      userProfileList.add(up);
     }
 
     return userProfileList;
+  }
+
+  @Override
+  public void update(Observable o, Object arg) {
+    generateData();
   }
 
   private class HwjvAsyncTask extends AsyncTask<String, String, String> {
@@ -154,8 +165,9 @@ public class MainActivity extends AppCompatActivity {
 
       // Deserialize JSON string:
       Type listType = new TypeToken<List<UserProfile>>(){}.getType();
-      mUserProfileList = gson.fromJson(result, listType);
-      for (UserProfile up : mUserProfileList) {
+      List<UserProfile> userProfileList = gson.fromJson(result, listType);
+      mModel.setUserProfileList(userProfileList);
+      for (UserProfile up : userProfileList) {
         Log.d(TAG, "userName=[" + up.getUserName() +
             "], email=[" + up.getEmail() +
             "], amount=[" + up.getAmount() +
