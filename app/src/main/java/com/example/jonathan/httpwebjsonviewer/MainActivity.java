@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.jonathan.httpwebjsonviewer.adapter.CustomAdapter;
+import com.example.jonathan.httpwebjsonviewer.adapter.MyRecyclerViewAdapter;
 import com.example.jonathan.httpwebjsonviewer.model.UserProfile;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -59,20 +59,20 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    recyclerView.setAdapter(new CustomAdapter(generateData()));
+    recyclerView.setAdapter(new MyRecyclerViewAdapter(generateData()));
     recyclerView.addItemDecoration(new DividerItemDecoration(this,
         DividerItemDecoration.VERTICAL));
   }
 
-  private List<String> generateData() {
-    List<String> data = new ArrayList<>();
+  private List<UserProfile> generateData() {
+    List<UserProfile> data = new ArrayList<>();
 
     if (mUserProfileList != null) {
       for (int i = 0; i < mUserProfileList.size(); i++) {
-        data.add(mUserProfileList.get(i).getUserName());
+        data.add(mUserProfileList.get(i));
       }
     } else {
-      data.add("No data yet");
+      data.add(new UserProfile());
     }
 
     return data;
