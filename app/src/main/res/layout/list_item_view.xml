@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
-  android:layout_height="46dp">
+  android:layout_height="96dp">
 
     <TextView
       android:id="@+id/user_name_text_view"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="user name"
+      android:text="initial user name"
       android:textSize="16sp" />
 
     <TextView
@@ -15,7 +15,7 @@
       android:layout_below="@id/user_name_text_view"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="email"
+      android:text="initial email"
       android:textSize="16sp" />
 
     <TextView
@@ -23,7 +23,7 @@
       android:layout_below="@id/email_text_view"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="amount"
+      android:text="initial amount"
       android:textSize="16sp" />
 
     <TextView
@@ -31,7 +31,7 @@
       android:layout_below="@id/amount_text_view"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:text="friends"
+      android:text="initial friends"
       android:textSize="16sp" />
 
 </RelativeLayout>

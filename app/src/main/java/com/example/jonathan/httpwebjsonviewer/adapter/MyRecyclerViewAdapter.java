@@ -15,10 +15,10 @@ import java.util.List;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<
     MyRecyclerViewAdapter.ViewHolder> {
-  private List<UserProfile> mData;
+  private List<UserProfile> mUserProfileList;
 
-  public MyRecyclerViewAdapter(List<UserProfile> data) {
-    mData = data;
+  public MyRecyclerViewAdapter(List<UserProfile> userProfileList) {
+    mUserProfileList = userProfileList;
   }
 
   @Override
@@ -32,12 +32,21 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<
 
   @Override
   public void onBindViewHolder(MyRecyclerViewAdapter.ViewHolder holder, int position) {
-    holder.mUserNameTextView.setText(mData.get(position).getUserName());
+    UserProfile up = mUserProfileList.get(position);
+    holder.mUserNameTextView.setText(up.getUserName());
+    holder.mEmailTextView.setText(up.getEmail());
+    holder.mAmountTextView.setText(String.valueOf(up.getAmount()));
+    List<String> friendList = up.getFriendList();
+    if (friendList != null) {
+      holder.mFriendsTextView.setText(String.join(",", friendList));
+    } else {
+      holder.mFriendsTextView.setText("no friends");
+    }
   }
 
   @Override
   public int getItemCount() {
-    return mData.size();
+    return mUserProfileList.size();
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder
@@ -59,8 +68,13 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<
 
     @Override
     public void onClick(View view) {
-      Toast.makeText(view.getContext(), "position : " + getLayoutPosition() +
-          " text : " + mUserNameTextView.getText(), Toast.LENGTH_SHORT).show();
+      Toast.makeText(view.getContext(),
+          "position=[" + getLayoutPosition() +
+          "], [" + mUserNameTextView.getText() +
+          ", " + mEmailTextView.getText() +
+          ", " + mAmountTextView.getText() +
+          ", " + mFriendsTextView.getText() + "]",
+          Toast.LENGTH_SHORT).show();
     }
   }
 }

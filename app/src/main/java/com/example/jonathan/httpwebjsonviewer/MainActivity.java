@@ -23,6 +23,7 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    Log.d(TAG, "onCreate: start");
+    Log.d(TAG, "onCreate");
 
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
@@ -65,17 +66,23 @@ public class MainActivity extends AppCompatActivity {
   }
 
   private List<UserProfile> generateData() {
-    List<UserProfile> data = new ArrayList<>();
+    List<UserProfile> userProfileList = new ArrayList<>();
 
     if (mUserProfileList != null) {
       for (int i = 0; i < mUserProfileList.size(); i++) {
-        data.add(mUserProfileList.get(i));
+        userProfileList.add(mUserProfileList.get(i));
       }
     } else {
-      data.add(new UserProfile());
+      // If no userProfileList are available, use a dummy user profile:
+      UserProfile up = new UserProfile();
+      up.setUserName("no user name");
+      up.setEmail("no email");
+      up.setAmount(-1.0);
+      up.setFriendList(Arrays.asList("no", "friends"));
+      userProfileList.add(new UserProfile());
     }
 
-    return data;
+    return userProfileList;
   }
 
   private class HwjvAsyncTask extends AsyncTask<String, String, String> {

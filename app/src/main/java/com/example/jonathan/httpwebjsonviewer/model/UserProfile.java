@@ -11,7 +11,12 @@ public class UserProfile {
   @SerializedName("amount") private double mAmount;
   @SerializedName("friends") private List<String> mFriendList;
 
-  public UserProfile() {}
+  public UserProfile() {
+    mUserName = "no user name";
+    mEmail = "no email";
+    mAmount = -1.0;
+    mFriendList = null;
+  }
 
   public String getUserName() { return mUserName; }
   public void setUserName(String userName) { mUserName = userName; }
