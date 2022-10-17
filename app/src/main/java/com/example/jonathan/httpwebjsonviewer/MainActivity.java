@@ -34,8 +34,7 @@ public class MainActivity extends AppCompatActivity {
   private static final String TEST_JSON_URL =
       "https://raw.githubusercontent.com/jonathanzho/resFiles/master/json/user_profiles.json";
 
-  ProgressDialog pd;
-  TextView tvHW;
+  List<UserProfile> mUserProfileList;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -44,28 +43,40 @@ public class MainActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
 
+    // Get initial data:
+    HwjvAsyncTask jsonTask = new HwjvAsyncTask();
+    jsonTask.execute(TEST_JSON_URL);
+  }
+
+  @Override
+  protected void onResume() {
+    Log.d(TAG, "onResume");
+
+    super.onResume();
+
+    // Get updated data:
+    HwjvAsyncTask jsonTask = new HwjvAsyncTask();
+    jsonTask.execute(TEST_JSON_URL);
+
     RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
     recyclerView.setAdapter(new CustomAdapter(generateData()));
-    recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-
-
-    // Customization starts from here
-/*
-    tvHW = findViewById(R.id.tvHW);
-
-    HwjvAsyncTask jsonTask = new HwjvAsyncTask();
-    jsonTask.execute(TEST_JSON_URL);
-*/
-    Log.d(TAG, "onCreate: end");
+    recyclerView.addItemDecoration(new DividerItemDecoration(this,
+        DividerItemDecoration.VERTICAL));
   }
 
   private List<String> generateData() {
     List<String> data = new ArrayList<>();
-    for (int i = 0; i < 100; i++) {
-      data.add(String.valueOf(i) + "th Element");
+
+    if (mUserProfileList != null) {
+      for (int i = 0; i < mUserProfileList.size(); i++) {
+        data.add(mUserProfileList.get(i).getUserName());
+      }
+    } else {
+      data.add("No data yet");
     }
+
     return data;
   }
 
@@ -77,11 +88,6 @@ public class MainActivity extends AppCompatActivity {
       Log.d(TAG2, "onPreExecute");
 
       super.onPreExecute();
-
-      pd = new ProgressDialog(MainActivity.this);
-      pd.setMessage("Please wait!");
-      pd.setCancelable(false);
-      pd.show();
     }
 
     @Override
@@ -137,27 +143,19 @@ public class MainActivity extends AppCompatActivity {
 
       super.onPostExecute(result);
 
-      // Dismiss progress dialog
-      if (pd.isShowing()) {
-        pd.dismiss();
-      }
-
       // Set up Gson
       GsonBuilder gsonBuilder = new GsonBuilder();
       Gson gson = gsonBuilder.create();
 
       // Deserialize JSON string:
       Type listType = new TypeToken<List<UserProfile>>(){}.getType();
-      List<UserProfile> userProfileList = gson.fromJson(result, listType);
-      for (UserProfile up : userProfileList) {
+      mUserProfileList = gson.fromJson(result, listType);
+      for (UserProfile up : mUserProfileList) {
         Log.d(TAG, "userName=[" + up.getUserName() +
             "], email=[" + up.getEmail() +
             "], amount=[" + up.getAmount() +
             "], friends=[" + up.getFriendList() + "]");
       }
-
-      // Display
-      //tvHW.setText(result);
     }
   }
 }
