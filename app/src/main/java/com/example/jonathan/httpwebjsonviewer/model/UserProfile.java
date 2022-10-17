@@ -1,4 +1,4 @@
-package com.example.jonathan.httpwebjsonviewer.util;
+package com.example.jonathan.httpwebjsonviewer.model;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,10 +1,8 @@
 package com.example.jonathan.httpwebjsonviewer;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -12,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jonathan.httpwebjsonviewer.adapter.CustomAdapter;
-import com.example.jonathan.httpwebjsonviewer.util.UserProfile;
+import com.example.jonathan.httpwebjsonviewer.model.UserProfile;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
