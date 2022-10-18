@@ -25,7 +25,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<
   public MyRecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                              int viewType) {
     View rowItem = LayoutInflater.from(parent.getContext()).inflate(
-        R.layout.list_item_view, parent, false);
+        viewType, parent, false);
 
     return new ViewHolder(rowItem);
   }
@@ -47,6 +47,11 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<
   @Override
   public int getItemCount() {
     return mUserProfileList.size();
+  }
+
+  @Override
+  public int getItemViewType(int position) {
+    return R.layout.item_view;
   }
 
   public static class ViewHolder extends RecyclerView.ViewHolder
