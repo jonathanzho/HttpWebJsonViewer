@@ -3,7 +3,7 @@ package com.example.jonathan.httpwebjsonviewer.model;
 import java.util.List;
 import java.util.Observable;
 
-public class Model extends Observable {
+public class MainModel extends Observable {
   private List<UserProfile> mUserProfileList;
 
   public List<UserProfile> getUserProfileList() {

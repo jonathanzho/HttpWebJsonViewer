@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.jonathan.httpwebjsonviewer.adapter.MyRecyclerViewAdapter;
-import com.example.jonathan.httpwebjsonviewer.model.Model;
+import com.example.jonathan.httpwebjsonviewer.model.MainModel;
 import com.example.jonathan.httpwebjsonviewer.model.UserProfile;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,7 +37,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
       "https://raw.githubusercontent.com/jonathanzho/resFiles/master/json/user_profiles.json";
 
   // MVC architecture:
-  Model mModel;
+  MainModel mMainModel;
+
+  RecyclerView mRecyclerView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +49,14 @@ public class MainActivity extends AppCompatActivity implements Observer {
     setContentView(R.layout.activity_main);
 
     // Connect with ModeL:
-    mModel = new Model();
-    mModel.addObserver(this);
+    mMainModel = new MainModel();
+    mMainModel.addObserver(this);
 
-    // Get initial data:
-    HwjvAsyncTask jsonTask = new HwjvAsyncTask();
-    jsonTask.execute(TEST_JSON_URL);
+    // Set up RecyclerView:
+    mRecyclerView = findViewById(R.id.recycler_view);
+    mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
+        DividerItemDecoration.VERTICAL));
   }
 
   @Override
@@ -61,20 +65,16 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
     super.onResume();
 
+    // Update adapter:
+    mRecyclerView.setAdapter(new MyRecyclerViewAdapter(generateData()));
+
     // Get updated data:
     HwjvAsyncTask jsonTask = new HwjvAsyncTask();
     jsonTask.execute(TEST_JSON_URL);
-
-    RecyclerView recyclerView = findViewById(R.id.recycler_view);
-
-    recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    recyclerView.setAdapter(new MyRecyclerViewAdapter(generateData()));
-    recyclerView.addItemDecoration(new DividerItemDecoration(this,
-        DividerItemDecoration.VERTICAL));
   }
 
   private List<UserProfile> generateData() {
-    List<UserProfile> userProfileList = mModel.getUserProfileList();
+    List<UserProfile> userProfileList = mMainModel.getUserProfileList();
 
     if (userProfileList == null) {
       // If no userProfileList are available, use a dummy user profile:
@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
       // Deserialize JSON string:
       Type listType = new TypeToken<List<UserProfile>>(){}.getType();
       List<UserProfile> userProfileList = gson.fromJson(result, listType);
-      mModel.setUserProfileList(userProfileList);
+      mMainModel.setUserProfileList(userProfileList);
       for (UserProfile up : userProfileList) {
         Log.d(TAG, "userName=[" + up.getUserName() +
             "], email=[" + up.getEmail() +
