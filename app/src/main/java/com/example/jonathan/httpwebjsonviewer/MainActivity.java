@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
   }
 
   private List<UserProfile> generateData() {
+    Log.d(TAG, "generateData");
+
     List<UserProfile> userProfileList = mMainModel.getUserProfileList();
 
     if (userProfileList == null) {
@@ -93,7 +95,10 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
   @Override
   public void update(Observable o, Object arg) {
-    generateData();
+    Log.d(TAG, "update");
+
+    // Update adapter:
+    mRecyclerView.setAdapter(new MyRecyclerViewAdapter(generateData()));
   }
 
   private class HwjvAsyncTask extends AsyncTask<String, String, String> {
@@ -124,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         reader = new BufferedReader(new InputStreamReader(stream));
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         String line;
 
         while ((line = reader.readLine()) != null) {
